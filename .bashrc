@@ -18,6 +18,7 @@ alias llt='ll -t'
 alias j='jobs'
 alias soz="source $HOME/.bashrc"
 alias work="cd $(echo $HOME | sed -e 's/home/lustre/')"
+alias d="cd $HOME/Downloads"
 alias can="la $HOME/.Trash"
 alias poipoi="rm -rf $HOME/.Trash/{*,.??*}"
 
