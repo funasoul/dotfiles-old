@@ -10,7 +10,13 @@ fi
 
 ### User specific aliases and functions
 ## aliases
-alias ls='ls --color=auto -FC'
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+  alias ls='ls --color=auto -FC'
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  alias ls='ls -FCG'
+else
+  alias ls='ls -FC'
+fi
 alias ll='ls -lg'
 alias la='ls -A'
 alias lt='ls -t'
