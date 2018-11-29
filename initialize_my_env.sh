@@ -1,10 +1,10 @@
 #!/bin/zsh
 
 usage() {
-	echo "Usage: $0 hostname"
-	echo "  Synchronize environment with specified host."
-	echo "  (ex.) $0 funasoul"
-	exit 1
+  echo "Usage: $0 hostname"
+  echo "  Synchronize environment with specified host."
+  echo "  (ex.) $0 funasoul"
+  exit 1
 }
 
 is_dropbox_running() {
@@ -36,7 +36,7 @@ is_dropbox_running() {
 
 if [ $# -lt 1 ] || [ ${HOST} = $1 ]; then
   usage
-	return 1
+  return 1
 fi
 remotehost=$1
 
@@ -59,12 +59,12 @@ if [ $? = 0 ]; then
   echo "Dropbox running"
 else
   "Dropbox not running"
-	mkdir -p ~/Dropbox/Sync
-	cd ~/Dropbox/Sync/
-	echo rsync -auvz ${remotehost}':Dropbox/Sync/.??*' .
-	echo rsync -auvz ${remotehost}:Dropbox/Sync/Emacs .
+  mkdir -p ~/Dropbox/Sync
+  cd ~/Dropbox/Sync/
+  echo rsync -auvz ${remotehost}':Dropbox/Sync/.??*' .
+  echo rsync -auvz ${remotehost}:Dropbox/Sync/Emacs .
   echo rsync -auvz ${remotehost}:Dropbox/Sync/wombat.style .
-	echo rsync -auvz ${remotehost}:Dropbox/Sync/zsh .
+  echo rsync -auvz ${remotehost}:Dropbox/Sync/zsh .
   if [[ "$OSTYPE" == "darwin"* ]]; then
     echo rsync -auvz ${remotehost}:Dropbox/Sync/com.googlecode.iterm2.plist .
   fi
