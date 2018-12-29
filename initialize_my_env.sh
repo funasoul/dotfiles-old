@@ -47,13 +47,13 @@ fi
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
-cat > ~/.zshrc <<_EOU_
-export ZSH=$HOME/.oh-my-zsh
-ZSH_THEME="funa"
-ZSH_CUSTOM=$HOME/Dropbox/Sync/zsh/custom
-plugins=(docker docker-compose git github gitignore macports mosh osx screen sublime themes)
-source $ZSH/oh-my-zsh.sh
-_EOU_
+# cat > ~/.zshrc <<_EOU_
+# export ZSH=$HOME/.oh-my-zsh
+# ZSH_THEME="funa"
+# ZSH_CUSTOM=$HOME/Dropbox/Sync/zsh/custom
+# plugins=(docker docker-compose git github gitignore macports mosh osx screen sublime themes)
+# source $ZSH/oh-my-zsh.sh
+# _EOU_
 
 is_dropbox_running
 
@@ -69,7 +69,7 @@ else
   rsync -auvz ${remotehost}:Dropbox/Sync/wombat.style .
   rsync -auvz ${remotehost}:Dropbox/Sync/zsh .
   if [[ "$OSTYPE" == "darwin"* ]]; then
-    echo rsync -auvz ${remotehost}:Dropbox/Sync/com.googlecode.iterm2.plist .
+    rsync -auvz ${remotehost}:Dropbox/Sync/com.googlecode.iterm2.plist .
   fi
 fi
 
