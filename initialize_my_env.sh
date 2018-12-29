@@ -75,6 +75,7 @@ fi
 
 # Create symbolic link
 cd
+mv -f .zshrc .zshrc.default
 foreach i (.agignore .bash_profile .bashrc .exrc .gitconfig .gitignore_global .ideavimrc .inputrc .ispell_english .latexmkrc .pythonrc.py .screenrc .vim .vimrc .vrapperrc .zshrc .zshenv .zlogin .zlogout)
   ln -s ~/Dropbox/Sync/$i .
 end
