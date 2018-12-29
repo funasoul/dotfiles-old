@@ -51,6 +51,8 @@ cat > ~/.zshrc <<_EOU_
 export ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="funa"
 ZSH_CUSTOM=$HOME/Dropbox/Sync/zsh/custom
+plugins=(docker docker-compose git github gitignore macports mosh osx screen sublime themes)
+source $ZSH/oh-my-zsh.sh
 _EOU_
 
 is_dropbox_running
@@ -61,11 +63,11 @@ else
   echo "Dropbox not running"
   mkdir -p ~/Dropbox/Sync
   cd ~/Dropbox/Sync/
-  echo rsync -auvz ${remotehost}':Dropbox/Sync/.??*' .
-  echo rsync -auvz ${remotehost}:Dropbox/Sync/bin .
-  echo rsync -auvz ${remotehost}:Dropbox/Sync/Emacs .
-  echo rsync -auvz ${remotehost}:Dropbox/Sync/wombat.style .
-  echo rsync -auvz ${remotehost}:Dropbox/Sync/zsh .
+  rsync -auvz ${remotehost}':Dropbox/Sync/.??*' .
+  rsync -auvz ${remotehost}:Dropbox/Sync/bin .
+  rsync -auvz ${remotehost}:Dropbox/Sync/Emacs .
+  rsync -auvz ${remotehost}:Dropbox/Sync/wombat.style .
+  rsync -auvz ${remotehost}:Dropbox/Sync/zsh .
   if [[ "$OSTYPE" == "darwin"* ]]; then
     echo rsync -auvz ${remotehost}:Dropbox/Sync/com.googlecode.iterm2.plist .
   fi
@@ -73,7 +75,7 @@ fi
 
 # Create symbolic link
 cd
-foreach i (.agignore .bash_profile .bashrc .exrc .gitconfig .gitignore_global .ideavimrc .inputrc .ispell_english .latexmkrc .pythonrc.py .screenrc .vimrc .vrapperrc .zshrc .zshenv .zlogin .zlogout)
+foreach i (.agignore .bash_profile .bashrc .exrc .gitconfig .gitignore_global .ideavimrc .inputrc .ispell_english .latexmkrc .pythonrc.py .screenrc .vim .vimrc .vrapperrc .zshrc .zshenv .zlogin .zlogout)
   ln -s ~/Dropbox/Sync/$i .
 end
 ln -s ~/Dropbox/Sync/zsh/custom/zshrc-funa.zsh .zshrc.funa
