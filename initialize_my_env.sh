@@ -62,6 +62,7 @@ else
   mkdir -p ~/Dropbox/Sync
   cd ~/Dropbox/Sync/
   echo rsync -auvz ${remotehost}':Dropbox/Sync/.??*' .
+  echo rsync -auvz ${remotehost}:Dropbox/Sync/bin .
   echo rsync -auvz ${remotehost}:Dropbox/Sync/Emacs .
   echo rsync -auvz ${remotehost}:Dropbox/Sync/wombat.style .
   echo rsync -auvz ${remotehost}:Dropbox/Sync/zsh .
