@@ -58,7 +58,7 @@ is_dropbox_running
 if [ $? = 0 ]; then
   echo "Dropbox running"
 else
-  "Dropbox not running"
+  echo "Dropbox not running"
   mkdir -p ~/Dropbox/Sync
   cd ~/Dropbox/Sync/
   echo rsync -auvz ${remotehost}':Dropbox/Sync/.??*' .
@@ -79,4 +79,3 @@ end
 ln -s ~/Dropbox/Sync/zsh/custom/zshrc-funa.zsh .zshrc.funa
 
 echo "Syncenv done."
-
