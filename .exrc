@@ -2,13 +2,12 @@ set autoindent
 set autowrite
 set ignorecase
 set nonumber
-set redraw
+"set redraw
 set shell=/bin/zsh
 set shiftwidth=4
 set showmatch
 set tabstop=4
 set nowrapscan
-map g 1G
 map Q :w:e#
 map P "zp
 map -1 "1p 
