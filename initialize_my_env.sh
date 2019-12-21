@@ -69,6 +69,7 @@ else
   if [[ "$OSTYPE" == "darwin"* ]]; then
     rsync -auvz ${remotehost}:Dropbox/Sync/com.googlecode.iterm2.plist .
   fi
+  rm .zshrc.local .zsh3rc .zshrc4.dist .zshenv4.dist
 fi
 
 # Create symbolic link
