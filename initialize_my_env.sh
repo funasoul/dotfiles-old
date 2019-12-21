@@ -47,13 +47,11 @@ fi
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
-# cat > ~/.zshrc <<_EOU_
-# export ZSH=$HOME/.oh-my-zsh
-# ZSH_THEME="funa"
-# ZSH_CUSTOM=$HOME/Dropbox/Sync/zsh/custom
-# plugins=(docker docker-compose git github gitignore macports mosh osx screen sublime themes)
-# source $ZSH/oh-my-zsh.sh
-# _EOU_
+cat >> ~/.zshrc <<_EOU_
+export "ZSH=$HOME/.oh-my-zsh"
+ZSH_THEME="funa"
+ZSH_CUSTOM="$HOME/Dropbox/Sync/zsh/custom"
+_EOU_
 
 is_dropbox_running
 
@@ -64,7 +62,6 @@ else
   mkdir -p ~/Dropbox/Sync
   cd ~/Dropbox/Sync/
   rsync -auvz ${remotehost}':Dropbox/Sync/.??*' .
-  rsync -auvz ${remotehost}:Dropbox/Sync/bin .
   rsync -auvz ${remotehost}:Dropbox/Sync/Emacs .
   rsync -auvz ${remotehost}:Dropbox/Sync/wombat.style .
   rsync -auvz ${remotehost}:Dropbox/Sync/zsh .
@@ -75,8 +72,7 @@ fi
 
 # Create symbolic link
 cd
-mv -f .zshrc .zshrc.default
-foreach i (.agignore .bash_profile .bashrc .exrc .gitconfig .gitignore_global .ideavimrc .inputrc .ispell_english .latexmkrc .pythonrc.py .screenrc .vim .vimrc .vrapperrc .zshrc .zshenv .zlogin .zlogout)
+foreach i (.agignore .bash_profile .bashrc .exrc .gitconfig .gitignore_global .ideavimrc .inputrc .ispell_english .latexmkrc .pythonrc.py .screenrc .tmux .tmux.conf .vim .vimrc .vrapperrc .zshenv .zlogin .zlogout)
   ln -s ~/Dropbox/Sync/$i .
 end
 ln -s ~/Dropbox/Sync/zsh/custom/zshrc-funa.zsh .zshrc.funa
