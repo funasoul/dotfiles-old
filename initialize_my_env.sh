@@ -3,6 +3,7 @@
 usage() {
   echo "Usage: $0 hostname"
   echo "  Synchronize environment with specified host."
+  echo "  Usually, this script will be exectured on new machine."
   echo "  (ex.) $0 funasoul"
   exit 1
 }
@@ -49,30 +50,27 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 
 # do not use default ~/.zshrc
 rm ~/.zshrc
-#cat >> ~/.zshrc <<_EOU_
-#export ZSH="$HOME/.oh-my-zsh"
-#ZSH_THEME="funa"
-#ZSH_CUSTOM="$HOME/Dropbox/Sync/zsh/custom"
-#_EOU_
 
+# execute is_dropbox_running()
 is_dropbox_running
 
 if [ $? = 0 ]; then
   echo "Dropbox running"
 else
   echo "Dropbox not running"
+  echo "Rsync files from $remotehost..."
   mkdir -p ~/Dropbox/Sync
-  cd ~/Dropbox/Sync/
-  rsync -auvz ${remotehost}':Dropbox/Sync/.??*' .
-  rsync -auvz ${remotehost}:Dropbox/Sync/Emacs .
-  rsync -auvz ${remotehost}:Dropbox/Sync/mutt .
-  rsync -auvz ${remotehost}:Dropbox/Sync/nvim .
-  rsync -auvz ${remotehost}:Dropbox/Sync/wombat.style .
-  rsync -auvz ${remotehost}:Dropbox/Sync/zsh .
+  rsync -auz ${remotehost}':Dropbox/Sync/.??*' ~/Dropbox/Sync/
+  rsync -auz ${remotehost}:Dropbox/Sync/Emacs ~/Dropbox/Sync/
+  rsync -auz ${remotehost}:Dropbox/Sync/mutt ~/Dropbox/Sync/
+  rsync -auz ${remotehost}:Dropbox/Sync/nvim ~/Dropbox/Sync/
+  rsync -auz ${remotehost}:Dropbox/Sync/wombat.style ~/Dropbox/Sync/
+  rsync -auz ${remotehost}:Dropbox/Sync/zsh ~/Dropbox/Sync/
   if [[ "$OSTYPE" == "darwin"* ]]; then
-    rsync -auvz ${remotehost}:Dropbox/Sync/com.googlecode.iterm2.plist .
+    rsync -auz ${remotehost}:Dropbox/Sync/com.googlecode.iterm2.plist .
   fi
-  rm .zshrc.local .zsh3rc .zshrc4.dist .zshenv4.dist
+  echo "Removing unnecessary files."
+  rm '$HOME/Dropbox/Sync/{.zshrc.local,.zsh3rc,.zshrc4.dist,.zshenv4.dist}'
 fi
 
 # Create symbolic link
