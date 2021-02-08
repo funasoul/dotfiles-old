@@ -64,6 +64,7 @@ else
   rsync -auz ~/Dropbox/Sync/Emacs $remotehost:Dropbox/Sync/
   rsync -auz ~/Dropbox/Sync/mutt $remotehost:Dropbox/Sync/
   rsync -auz ~/Dropbox/Sync/nvim $remotehost:Dropbox/Sync/
+  rsync -auz ~/Dropbox/Sync/ranger $remotehost:Dropbox/Sync/
   rsync -auz ~/Dropbox/Sync/wombat.style $remotehost:Dropbox/Sync/
   rsync -auz ~/Dropbox/Sync/zsh $remotehost:Dropbox/Sync/
   if [[ $(ssh -x $remotehost echo '$OSTYPE') == "darwin"* ]]; then
@@ -84,6 +85,7 @@ ln -s ~/Dropbox/Sync/zsh/custom/zshrc-funa.zsh .zshrc.funa
 mkdir -p ~/.config
 cd ~/.config
 ln -s ~/Dropbox/Sync/nvim .
+ln -s ~/Dropbox/Sync/ranger .
 EOF
 
 echo "Syncenv done."
