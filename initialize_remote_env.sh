@@ -83,13 +83,22 @@ create_env_links() {
   local linklist_config=(nvim ranger)
   remotehost=$1
   echo "Creating symbolic links on $remotehost..."
+  # Passing an array to remote hosts via ssh
+  # https://unix.stackexchange.com/a/342575
+  linklist_home_def=$(typeset -p linklist_home)
+  linklist_config_def=$(typeset -p linklist_config)
   ssh -x -t $remotehost zsh -s <<EOF
+$linklist_home_def
+$linklist_config_def
 cd
-foreach i ($linklist_home)
-  if [ -L ${i} ]; then
-    rm ${i}
+foreach i ("\${linklist_home[@]}")
+  if [ -L "\$i" ]; then
+    rm "\$i"
   fi
-  ln -s ~/$REMOTE_SYNC_DIR/${i} .
+  if [ -f "\$i" ]; then
+    mv -f "\$i" "\$i".dist
+  fi
+  ln -s ~/$REMOTE_SYNC_DIR/"\$i" .
 end
 if [ -L .zshrc.funa ]; then
   rm .zshrc.funa
@@ -98,11 +107,14 @@ ln -s ~/$REMOTE_SYNC_DIR/zsh/custom/zshrc-funa.zsh .zshrc.funa
 
 mkdir -p ~/.config
 cd ~/.config
-foreach i ($linklist_config)
-  if [ -L ${i} ]; then
-    rm ${i}
+foreach i ("\${linklist_config[@]}")
+  if [ -L "\$i" ]; then
+    rm "\$i"
   fi
-  ln -s ~/$REMOTE_SYNC_DIR/${i} .
+  if [ -f "\$i" ]; then
+    mv -f "\$i" "\$i".dist
+  fi
+  ln -s ~/$REMOTE_SYNC_DIR/"\$i" .
 end
 EOF
 }
