@@ -11,6 +11,11 @@ usage() {
   exit 1
 }
 
+# Returns whether the given command is executable or aliased.
+_has() {
+  return $( whence $1 &>/dev/null )
+}
+
 can_ssh_via_publickey() {
   # Return 0 if ssh login via publickey.
   # https://unix.stackexchange.com/a/472829
@@ -126,11 +131,16 @@ fi
 remotehost=$1
 
 if ! can_ssh_via_publickey ; then
-  echo "This script will run ssh many times."
-  echo "It is recommended that you register your public key on the remote host before running this script."
-  echo "(ex.) % ssh-copy-id $1"
-  echo "      % $0 $1"
-  exit 1
+  # Copy ssh public key to remotehost.
+  if _has ssh-copy-id; then
+    ssh-copy-id $remotehost
+  else
+    echo "This script will run ssh many times."
+    echo "It is recommended that you register your public key on the remote host before running this script."
+    echo "(ex.) % ssh-copy-id $remotehost"
+    echo "      % $0 $remotehost"
+    exit 1
+  fi
 fi
 
 # check ~/.zshrc on remote host.
