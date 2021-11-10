@@ -3,6 +3,17 @@ setopt extendedglob
 
 REMOTE_SYNC_DIR='Dropbox/Sync'
 
+## arrays for rsync_env_files
+synclist=(Emacs mutt nvim ranger wombat.style zsh)
+synclist_macos=(com.googlecode.iterm2.plist)
+synclist_ignore=(.zshrc.local .zsh3rc .zshrc4.dist .zshenv4.dist)
+## arrays for create_env_links
+linklist_home=(.agignore .bash_profile .bashrc .exrc .gitconfig .gitignore_global
+	.ideavimrc .inputrc .ispell_english .latexmkrc .muttrc .npmrc .pythonrc.py
+	.screenrc .source-highlight .terminalizer .tmux .tmux.conf .vim .vimrc .vrapperrc
+	.zlogin .zlogout .zshenv .zshrc)
+linklist_config=(nvim ranger)
+
 usage() {
   echo "Usage: $0 remotehost"
   echo "  Synchronize my environment to specified remote host."
@@ -55,10 +66,7 @@ rsync_env_files() {
     echo "Please specify remote host."
     return 1
   fi
-  local synclist=(Emacs mutt nvim ranger wombat.style zsh)
-  local synclist_macos=(com.googlecode.iterm2.plist)
-  local synclist_ignore=(.zshrc.local .zsh3rc .zshrc4.dist .zshenv4.dist)
-  remotehost=$1
+  local remotehost=$1
   echo "Rsync files to $remotehost..."
   ssh -x $remotehost mkdir -p '$HOME/'$REMOTE_SYNC_DIR
   # rsynd dot files except .DS_Store
@@ -81,12 +89,7 @@ create_env_links() {
     echo "Please specify remote host."
     return 1
   fi
-  local linklist_home=(.agignore .bash_profile .bashrc .exrc .gitconfig .gitignore_global
-                      .ideavimrc .inputrc .ispell_english .latexmkrc .muttrc .npmrc .pythonrc.py
-                      .screenrc .source-highlight .terminalizer .tmux .tmux.conf .vim .vimrc .vrapperrc
-                      .zlogin .zlogout .zshenv .zshrc)
-  local linklist_config=(nvim ranger)
-  remotehost=$1
+  local remotehost=$1
   echo "Creating symbolic links on $remotehost..."
   # Passing an array to remote hosts via ssh
   # https://unix.stackexchange.com/a/342575
