@@ -103,7 +103,7 @@ foreach i ("\${linklist_home[@]}")
   if [ -L "\$i" ]; then
     rm "\$i"
   fi
-  if [ -f "\$i" ]; then
+  if [ -f "\$i" ] || [ -d "\$i" ]; then
     mv -f "\$i" "\$i".dist
   fi
   ln -s ~/$REMOTE_SYNC_DIR/"\$i" .
@@ -119,7 +119,7 @@ foreach i ("\${linklist_config[@]}")
   if [ -L "\$i" ]; then
     rm "\$i"
   fi
-  if [ -f "\$i" ]; then
+  if [ -f "\$i" ] || [ -d "\$i" ]; then
     mv -f "\$i" "\$i".dist
   fi
   ln -s ~/$REMOTE_SYNC_DIR/"\$i" .
