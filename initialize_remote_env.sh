@@ -73,7 +73,7 @@ rsync_env_files() {
     return 1
   fi
   local remotehost=$1
-  echo "${fg_bold[cyan]}Rsync files to $remotehost...${reset_color}"
+  echo "${fg_bold[cyan]}Rsync files to ${fg_bold[yellow]}$remotehost${fg_bold[cyan]}...${reset_color}"
   ssh -x $remotehost mkdir -p '$HOME/'$REMOTE_SYNC_DIR
   # rsync dot files except .DS_Store and .tmux/resurrect
   rsync -auz --info=name --exclude '.DS_Store' --exclude '.tmux/resurrect' ~/Dropbox/Sync/.??* $remotehost:$REMOTE_SYNC_DIR
@@ -174,4 +174,4 @@ fi
 # Create symbolic link
 create_env_links $remotehost
 
-echo "Initialize remote env on $remotehost done."
+echo "${fg_bold[green]}Initialize remote env on ${fg_bold[yellow]}$remotehost ${fg_bold[green]}done.${reset_color}"
