@@ -11,7 +11,7 @@ REMOTE_SYNC_DIR='Dropbox/Sync'
 ## arrays for rsync_env_files
 synclist=(Emacs mutt nvim ranger wombat.style zsh)
 synclist_macos=(com.googlecode.iterm2.plist)
-synclist_ignore=(.zshrc.local .zsh3rc .zshrc4.dist .zshenv4.dist)
+synclist_ignore=(.DS_Store .tmux/resurrect .zshrc.local .zsh3rc .zshrc4.dist .zshenv4.dist)
 ## arrays for create_env_links
 linklist_home=(.agignore .bash_profile .bashrc .exrc .gitconfig .gitignore_global
   .ideavimrc .inputrc .ispell_english .latexmkrc .muttrc .npmrc .pythonrc.py
@@ -76,14 +76,12 @@ rsync_env_files() {
   echo "${fg_bold[cyan]}Rsync files to ${fg_bold[yellow]}$remotehost${fg_bold[cyan]}...${reset_color}"
   ssh -x $remotehost mkdir -p '$HOME/'$REMOTE_SYNC_DIR
   # rsync dot files except .DS_Store and .tmux/resurrect
-  rsync -auz --info=name --exclude '.DS_Store' --exclude '.tmux/resurrect' ~/Dropbox/Sync/.??* $remotehost:$REMOTE_SYNC_DIR
-  rsync -auz --info=name ~/Dropbox/Sync/${^synclist} $remotehost:$REMOTE_SYNC_DIR
+  rsync -auz --info=name '--exclude='${^synclist_ignore} ~/Dropbox/Sync/.??* $remotehost:$REMOTE_SYNC_DIR
+  rsync -auz --info=name '--exclude='${^synclist_ignore} ~/Dropbox/Sync/${^synclist} $remotehost:$REMOTE_SYNC_DIR
   # macOS specific files
   if [[ $(ssh -x $remotehost echo '$OSTYPE') == "darwin"* ]]; then
-    rsync -auz --info=name ~/Dropbox/Sync/${^synclist_macos} $remotehost:$REMOTE_SYNC_DIR
+    rsync -auz --info=name '--exclude='${^synclist_ignore} ~/Dropbox/Sync/${^synclist_macos} $remotehost:$REMOTE_SYNC_DIR
   fi
-  echo "${fg_bold[cyan]}Removing unnecessary files.${reset_color}"
-  ssh -x $remotehost 'cd $HOME/'$REMOTE_SYNC_DIR' ;' rm ${synclist_ignore[@]}
 }
 
 create_env_links() {
