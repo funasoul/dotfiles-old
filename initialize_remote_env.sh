@@ -1,5 +1,10 @@
 #!/bin/zsh
-setopt extendedglob
+# requires extended_glob
+setopt extended_glob
+
+## Colors
+autoload -Uz colors
+colors
 
 REMOTE_SYNC_DIR='Dropbox/Sync'
 
@@ -9,9 +14,9 @@ synclist_macos=(com.googlecode.iterm2.plist)
 synclist_ignore=(.zshrc.local .zsh3rc .zshrc4.dist .zshenv4.dist)
 ## arrays for create_env_links
 linklist_home=(.agignore .bash_profile .bashrc .exrc .gitconfig .gitignore_global
-	.ideavimrc .inputrc .ispell_english .latexmkrc .muttrc .npmrc .pythonrc.py
-	.screenrc .source-highlight .terminalizer .tmux .tmux.conf .vim .vimrc .vrapperrc
-	.zlogin .zlogout .zshenv .zshrc)
+  .ideavimrc .inputrc .ispell_english .latexmkrc .muttrc .npmrc .pythonrc.py
+  .screenrc .source-highlight .terminalizer .tmux .tmux.conf .vim .vimrc .vrapperrc
+  .zlogin .zlogout .zshenv .zshrc)
 linklist_config=(nvim ranger)
 
 usage() {
@@ -63,34 +68,32 @@ is_dropbox_running() {
 
 rsync_env_files() {
   if [ $# -lt 1 ]; then
-    echo "Please specify remote host."
+    echo "${fg_bold[red]}Please specify remote host.${reset_color}"
+    echo "(ex.) % $0 bucket"
     return 1
   fi
   local remotehost=$1
-  echo "Rsync files to $remotehost..."
+  echo "${fg_bold[cyan]}Rsync files to $remotehost...${reset_color}"
   ssh -x $remotehost mkdir -p '$HOME/'$REMOTE_SYNC_DIR
-  # rsynd dot files except .DS_Store
-  rsync -auz ~/Dropbox/Sync/.(??*~DS_Store) $remotehost:$REMOTE_SYNC_DIR
-  foreach i ($synclist)
-    rsync -auz ~/Dropbox/Sync/${i} $remotehost:$REMOTE_SYNC_DIR
-  end
+  # rsync dot files except .DS_Store and .tmux/resurrect
+  rsync -auz --info=name --exclude '.DS_Store' --exclude '.tmux/resurrect' ~/Dropbox/Sync/.??* $remotehost:$REMOTE_SYNC_DIR
+  rsync -auz --info=name ~/Dropbox/Sync/${^synclist} $remotehost:$REMOTE_SYNC_DIR
   # macOS specific files
   if [[ $(ssh -x $remotehost echo '$OSTYPE') == "darwin"* ]]; then
-    foreach i ($synclist_macos)
-      rsync -auz ~/Dropbox/Sync/${i} $remotehost:$REMOTE_SYNC_DIR
-    end
+    rsync -auz --info=name ~/Dropbox/Sync/${^synclist_macos} $remotehost:$REMOTE_SYNC_DIR
   fi
-  echo "Removing unnecessary files."
+  echo "${fg_bold[cyan]}Removing unnecessary files.${reset_color}"
   ssh -x $remotehost 'cd $HOME/'$REMOTE_SYNC_DIR' ;' rm ${synclist_ignore[@]}
 }
 
 create_env_links() {
   if [ $# -lt 1 ]; then
-    echo "Please specify remote host."
+    echo "${fg_bold[red]}Please specify remote host.${reset_color}"
+    echo "(ex.) % $0 bucket"
     return 1
   fi
   local remotehost=$1
-  echo "Creating symbolic links on $remotehost..."
+  echo "${fg_bold[cyan]}Creating symbolic links on $remotehost...${reset_color}"
   # Passing an array to remote hosts via ssh
   # https://unix.stackexchange.com/a/342575
   linklist_home_def=$(typeset -p linklist_home)
